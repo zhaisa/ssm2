@@ -10,10 +10,10 @@ import com.jenkins.vo.User;
 @Mapper
 @Repository
 public interface UserDao {
-	@Select("select * from sys_user  where username=#{username}")
+	@Select("select username from sys_user  where username=#{username}")
 	User findByUsername(String username);
 
-	@Select("select * from sys_user  where username=#{username} and password=#{password}")
+	@Select("select username,password from sys_user  where username=#{username} and password=#{password}")
 	User findByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
 
 	@Select("select * from sys_user  where id=#{id}")

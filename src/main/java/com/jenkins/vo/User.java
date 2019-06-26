@@ -2,6 +2,8 @@ package com.jenkins.vo;
 
 import java.util.Date;
 
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+
 public class User {
 
 	/** 用户Id**/

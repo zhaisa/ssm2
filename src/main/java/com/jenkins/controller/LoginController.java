@@ -8,6 +8,8 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -47,21 +49,26 @@ public class LoginController extends BaseController {
 		return mv;
 	}
 	@RequestMapping(value = "/loginon",method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+//	@ResponseBody
 	public String doLogin(String username,String password,HttpSession session,HttpServletRequest request) throws ClassNotFoundException {
 		username=request.getParameter("username");
 		password=request.getParameter("password");
 		System.out.println(username);
 		System.out.println(password);
-		if("test"==username&&"123"==password) {
-			User user=userservice.findByUsernameAndPassword(username, password);
-			if(user!=null) {
+		User user=userservice.findByUsernameAndPassword(username, password);
+		
+		if("test".equals(username)&& "123".equals(password)) {		
+	//		System.out.println("---->"+user);	
 			session.setAttribute("user", user);
-			return "redirect:/index";
-			}
+			
+			// String username1=(String)session.getAttribute("user");
+			return "redirect:index";
 		}else {
-			return "参数错误";
+			System.out.println("这是一只小小小鸟！！！！");
+			return "redirect:login";
+		
 		}
-		return "redirect:/login";
+		
 		
 		
 	}
@@ -88,10 +95,16 @@ public class LoginController extends BaseController {
 //	}
 	
 	@RequestMapping(value = "/index", produces = "text/html;charset=UTF-8")
-	public ModelAndView toMain(HttpSession session) {
+	public ModelAndView toMain(HttpSession session,HttpServletRequest request,ModelMap model) {
 		ModelAndView mv=new ModelAndView();
-		session.getAttribute("user");
-		mv.addObject("welcome", "登录成功");
+		User user=(User) request.getSession().getAttribute("user");
+	
+		String username=user.getUsername();	
+		System.out.println(username+"<<<<");
+//		mv.addObject("username", userservice.findByUsername(username));
+		model.addAttribute("user",userservice.findByUsername(username));
+		
+		
 		return mv;
 		
 }
